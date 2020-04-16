@@ -8,51 +8,43 @@ using namespace std;
 Service::Service() {
 }
 
-void Service::setRepo(const ReposFile& r)
-{
-	reposFile = r;
-}
-
 //destructor
 Service::~Service() {
 }
 
-//constructor cu paramentru
-Service::Service(const ReposFile& r)
-{
-	reposFile = r;
-}
+//constructor cu paramentru pentru RepoTemplate
+Service::Service(const RepoTemplate<RezervareCamera>& repository) : repo{ repository } {}
+
+//constructor cu paramentru pentru RepoFile
+Service::Service(const RepoFile<RezervareCamera>& repository) : reposFile{ repository } {}
+
 
 //citeste elementele din fisier
-void Service::loadFromFile(const char* fileName)
+void Service::loadFromFile() 
 {
-	this->reposFile.loadFromFile(fileName);
+	reposFile.loadFromFile();
+	reposFile.saveToFile();
 }
 
 //sterge elementele din fisier
-void Service::clearFile(const char* fileName)
+void Service::clearFromFile()
 {
-	this->reposFile.clearFile(fileName);
+	reposFile.clearFromFile();
 }
+
 
 //scrie un element in fisier text
 void Service::saveToFile()
 {
-	this->reposFile.saveToFile();
+	reposFile.saveToFile();
 }
 
-//returneaza toate elementele din reposFile
-void Service::getAllFile()
-{
-	reposFile.getAllFile();
-}
 
 //adauga un element (apeleaza addElem din reposFile)
 //in: element de tip RezervareCamera
 //out: -
-void Service::adauga(RezervareCamera&e)
+void Service::adauga(RezervareCamera& e)
 {
-	//repoTemplate.addElem(e);
 	reposFile.addElem(e);
 	reposFile.saveToFile();
 }
@@ -61,7 +53,6 @@ void Service::adauga(RezervareCamera&e)
 //in: element de tip RezervareCamera
 //out -
 void Service::deleteElem(RezervareCamera& e) {
-	//repoTemplate.deleteElem(e);
 	reposFile.deleteElem(e);
 	reposFile.saveToFile();
 }
@@ -70,7 +61,6 @@ void Service::deleteElem(RezervareCamera& e) {
 //in: element de tip RezervareCamera
 //out: -
 void Service::update(RezervareCamera& e, RezervareCamera& new_e) {
-	//repoTemplate.updateElem(e, new_e);
 	reposFile.updateElem(e, new_e);
 	reposFile.saveToFile();
 }
@@ -79,101 +69,78 @@ void Service::update(RezervareCamera& e, RezervareCamera& new_e) {
 //returneaza toate elementele(apeleaza get all din repo)
 vector<RezervareCamera> Service::getAll()
 {
-	//return this->repoTemplate.getAll();
+	
 	return reposFile.getAll();
 }
 
 //gaseste elementul cu un id dat
 RezervareCamera Service::findElemFromId(int id) 
 {
-	//return repoTemplate.findElemFromId(id);
+	
 	return reposFile.findElemFromId(id);
 }
 
 //dimensiunea service-ului
 int Service::getSize()
 {
-	//return repoTemplate.getSize();
 	return reposFile.getSize();
 }
 
-void Service::procentaj(ReposFile reposFile, int v[3]) {
-	reposFile.loadFromFile("Camere.txt");
+//determinarea procentajului unui anumit tip
+//in: tip, char
+//out: procent, int
+int Service::procentaj(char* tip)
+{
 	vector<RezervareCamera> elem = reposFile.getAll();
 
-	int contor_dubla = 0;
-	int dubla_true = 0;
-	int contor_vip = 0;
-	int vip_true = 0;
-	int contor_simpla = 0;
-	int simpla_true = 0;
+	int nrCam = 0;
+	int nrCamEliberate = 0;
+
 	for (int i = 0; i < elem.size(); i++)
 	{
-		if (strstr(elem[i].getTip(), "simpla"))
+		if (strcmp(elem[i].getTip(),tip) == 0)
 		{
-			contor_simpla++;
+			nrCam++;
 			if (elem[i].getEliberata() == true)
-				simpla_true++;
-		}
-		if (strstr(elem[i].getTip(), "vip"))
-		{
-			contor_vip++;
-			if (elem[i].getEliberata() == true)
-				vip_true++;
-		}
-		if (strstr(elem[i].getTip(), "dubla"))
-		{
-			contor_dubla++;
-			if (elem[i].getEliberata() == true)
-				dubla_true++;
+				nrCamEliberate++;
 		}
 	}
-	float procentaj_simpla = 0.0;
-	float procentaj_dubla = 0.0;
-	float procentaj_vip = 0.0;
-	cout << contor_simpla;
-	procentaj_simpla = (100 * simpla_true) / contor_simpla;
-	procentaj_dubla = (100 * dubla_true) / contor_dubla;
-	procentaj_vip = (100 * vip_true) / contor_vip;
-	int x[3];
-	x[2] = procentaj_simpla;
-	x[0] = procentaj_dubla;
-	x[1] = procentaj_vip;
-	int aux = 0;
-	for (int i = 0; i < 2; i++)
-		for (int j = i + 1; j < 3; j++)
-			if (x[i] >= x[j])
-			{
-				aux = x[i];
-				x[i] = x[j];
-				x[j] = aux;
-			}
 
-	//1 pentru simpla
-	//2 pentru dubla
-	//3 pentru vip
+	int procent = (nrCamEliberate*100)/nrCam;
 
-	int k1 = 0;
-	int k2 = 0;
-	int k3 = 0;
-	for (int i = 0; i < 3; i++)
+	return procent;
+}
+
+//determinarea tipurilor si sortarea dupa procentaj
+void Service::procentaj_tipuri()
+{
+	vector<RezervareCamera> elem = reposFile.getAll();
+
+	char tipuri[100][10]; int k = -1;
+	for (int i = 0; i < elem.size(); i++)
+		strcpy_s(tipuri[i], strlen("") + 1, "");					//vector nul
+	for (int i = 0; i < elem.size(); i++)
 	{
-		if (x[i] == procentaj_simpla && k1 == 0)
+		int ok = 0;
+		for (int k = 0; k < elem.size(); k++)
+			if (strcmp(elem[i].getTip(), tipuri[k]) == 0)
+				ok++;
+		if (ok == 0)
 		{
-			k1++;
-			v[i] = procentaj_simpla * 10 + 1;
-			
-		}
-		if (x[i] == procentaj_dubla && k2 == 0)
-		{
-			k2++;
-			v[i] = procentaj_dubla * 10 + 2;
-		}
-		if (x[i] == procentaj_vip && k3 == 0)
-		{
-			k3++;
-			v[i] = procentaj_vip * 10 + 3;
+			k++;
+			strcpy_s(tipuri[k], strlen(elem[i].getTip()) + 1, elem[i].getTip());
 		}
 	}
-	
+	char aux[10];
+	for (int i=0;i<=k-1;i++)
+		for (int j=i+1;j<=k;j++)
+				if (procentaj(tipuri[i]) >= procentaj(tipuri[j]))
+				{
+					strcpy_s(aux, strlen(tipuri[i]) + 1, tipuri[i]); 
+					strcpy_s(tipuri[i], strlen(tipuri[j]) + 1, tipuri[j]);
+					strcpy_s(tipuri[j], strlen(aux) + 1, aux);
+				}
+	for (int i=0;i<=k;i++)
+		if (!(strcmp(tipuri[i], "") == 0))
+			cout << tipuri[i] << ": " << procentaj(tipuri[i]) << "%;" << endl;
 }

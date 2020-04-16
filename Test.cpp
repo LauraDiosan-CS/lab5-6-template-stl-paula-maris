@@ -2,7 +2,6 @@
 #include "Entitate.h"
 #include "Service.h"
 #include "RepoFile.h"
-#include "ReposFile.h"
 #include <assert.h>
 #include "RepoTemplate.h"
 #include <iostream>
@@ -68,9 +67,10 @@ void test4()
 
 
 void test6() {
-	ReposFile repo;
+	RepoFile<RezervareCamera> repo("Test1.txt");
+	repo.clearFromFile();
 	vector<RezervareCamera> list;
-	repo.loadFromFile("Test1.txt");
+	repo.loadFromFile();
 	list = repo.getAll();
 	assert(repo.getSize() == 3);
 	assert(list[0].getId() == 1);
@@ -81,9 +81,10 @@ void test6() {
 
 void test7()
 {
-	ReposFile r;
+	RepoFile<RezervareCamera> r("Test2.txt");
+	r.clearFromFile();
 	assert(r.getSize() == 0);
-	r.loadFromFile("Test2.txt");
+	r.loadFromFile();	
 	assert(r.getSize() == 3);
 	vector<RezervareCamera> list;
 	list = r.getAll();
@@ -107,10 +108,11 @@ void test7()
 
 void test8()
 {
-	ReposFile r;
-	Service s;
+	RepoFile<RezervareCamera> r("Test3.txt");		//repo
+	Service s = { r };
+	s.clearFromFile();								//service
 	assert(s.getSize() == 0);
-	s.loadFromFile("Test3.txt");
+	s.loadFromFile();
 	assert(s.getSize() == 3);
 	vector<RezervareCamera> list;
 	list = s.getAll();
@@ -135,14 +137,19 @@ void test8()
 
 void test9()
 {
-	ReposFile r;
-	Service s;
-	assert(s.getSize() == 0);			// 0 elemente in fisier
-	s.loadFromFile("Test4.txt");		//incarcarea elementelor din fisier
-	assert(s.getSize() == 6);			// 6 elemente in fisier
-	vector<RezervareCamera> list;
-	list = s.getAll();
-	int v[3];
-	s.procentaj(r, v);
-	assert(v[2] == 1001);				//procentajul este de 100, iar 1 inseamna ca este tipul simpla
+	RepoFile<RezervareCamera> r("Test4.txt");
+	Service s = { r };
+	s.clearFromFile();
+	assert(s.getSize() == 0);						// 0 elemente in fisier
+	s.loadFromFile();								//incarcarea elementelor din fisier
+	assert(s.getSize() == 6);						// 6 elemente in fisier
+	char tip[7];
+	strcpy_s(tip, strlen("simpla") + 1, "simpla");			
+	assert(s.procentaj(tip) == 100);				//apelarea functionalitatii din service
+	char tip2[7];
+	strcpy_s(tip2, strlen("dubla") + 1, "dubla");
+	assert(s.procentaj(tip2) == 33);
+	char tip3[7];
+	strcpy_s(tip3, strlen("vip") + 1, "vip");
+	assert(s.procentaj(tip3) == 0);
 }

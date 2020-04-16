@@ -6,7 +6,7 @@
 #include "RepoTemplate.h"
 #include "UI.h"
 #include "Service.h"
-#include "ReposFile.h"
+#include "RepoFile.h"
 #include <iostream>
 #include <string.h>
 #include <string>
@@ -25,51 +25,14 @@ int main() {
 	test8();
 	test9();
 	cout << "succes" << endl;
-	int option;
-	UI u;
-	Service serv;
-	ReposFile repo;
-	repo.loadFromFile("Camere.txt");
-	repo.clearFile("Camere.txt");
-	serv.setRepo(repo);
-	u.incarcaElemente(serv);								//daca dorim sa avem deja cateva elemente
-	u.afisare(serv);
-	bool stop = false;
-	u.afisare_meniu();
-	while (stop == false) {
-		option = u.get_input();
-		if (option == 1) {									//adaugarea unei camere
-			u.addElem(serv);
-			u.afisare(serv);
-			u.afisare_meniu();
-			continue;
-		}
-		if (option == 2) {									//stergerea unei camere
-			u.deleteElem(serv);
-			u.afisare(serv);
-			u.afisare_meniu();
-			continue;
-		}
-		if (option == 3) {									//actualizarea unei camere
-			u.updateElem(serv);
-			u.afisare(serv);
-			u.afisare_meniu();
-			continue;
-		}
-		if (option == 4) {
-			u.afisare_procentaj(serv);						//afisarea procentajului tipurilor de camera
-			u.afisare_meniu();
-			continue;
-		}
-		if (option == 10) {
-			u.afisare(serv);								//afisarea tuturor camerelor
-			u.afisare_meniu();
-			continue;	
-		}
-		if (option == 11) {
-			stop = true;									//oprirea programului
-			repo.getAll().clear();
-		}
-	}
+
+							/* ------ RepoFile ------*/
+	RepoFile<RezervareCamera> repoFile("Camere.txt"); Service service = { repoFile };
+
+						  /* ------ RepoTemplate ------*/
+	//RepoTemplate<RezervareCamera> repo; Service service = { repo };
+
+	UI u = { service };
+	u.run_ui(service);
 	return 0;
 }

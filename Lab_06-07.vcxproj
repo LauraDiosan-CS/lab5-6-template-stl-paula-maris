@@ -149,22 +149,17 @@
   <ItemGroup>
     <ClCompile Include="Entitate.cpp" />
     <ClCompile Include="Lab_06-07.cpp" />
-    <ClCompile Include="RepoFile.cpp" />
-    <ClCompile Include="ReposFile.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="UI.cpp" />
-    <ClCompile Include="Validator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entitate.h" />
     <ClInclude Include="RepoFile.h" />
-    <ClInclude Include="ReposFile.h" />
     <ClInclude Include="RepoTemplate.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="Test.h" />
     <ClInclude Include="UI.h" />
-    <ClInclude Include="Validator.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Camere.txt" />

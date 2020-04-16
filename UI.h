@@ -2,7 +2,6 @@
 
 #include "Service.h"
 #include "Entitate.h"
-#include "Validator.h"
 #include<iostream>
 #include<vector>
 #include<string>
@@ -12,9 +11,10 @@ using namespace std;
 class UI {
 private:
 	Service serv;
-	Validator valid;
-	ReposFile repo;
 public:
+	UI();
+	UI(const Service& service);
+	~UI();
 	void addElem(Service& serv);
 	void deleteElem(Service& serv);
 	void updateElem(Service& serv);
@@ -25,4 +25,5 @@ public:
 	int get_input();
 	void incarcaElemente(Service& serv);
 	void afisareFisier(Service& serv);
+	void run_ui(Service& serv);
 };

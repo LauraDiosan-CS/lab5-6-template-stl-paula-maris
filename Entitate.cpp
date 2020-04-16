@@ -103,15 +103,23 @@ bool RezervareCamera::operator==(const RezervareCamera& s) {
 	return (id == s.id) && eliberata == s.eliberata && (strcmp(tip, s.tip) == 0 && (strcmp(nr, s.nr) == 0));
 }
 
-//afisarea1
-ostream& operator<<(ostream& os, const RezervareCamera& s)
-{
-	os << "ID-ul: " << s.id << ", numarul: " << s.nr << ", tipul: " << s.tip << ", eliberata: " << s.eliberata << endl;
-	return os;
-}
-
 //afisare2
 void RezervareCamera::afisare() {
 	cout << "ID: " << this->id << ", numarul: " << this->nr << ", tip: " << this->tip << ", eliberata: " << this->eliberata;
+}
 
+ostream& operator<<(ostream& os, const RezervareCamera& p)
+{
+	cout << "ID: " << p.id << ", numarul: " << p.nr << ", tip: " << p.tip << ", eliberata: " << p.eliberata;
+	return os;
+}
+
+istream& operator>>(istream& is, RezervareCamera& p)
+{
+	if (p.nr == NULL)
+		p.nr = new char[20];
+	if (p.tip == NULL)
+		p.tip = new char[20];
+	is >> p.id >> p.nr >> p.tip >> p.eliberata;
+	return is;
 }

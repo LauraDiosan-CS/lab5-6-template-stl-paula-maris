@@ -2,7 +2,21 @@
 #include<iostream>
 using namespace std;
 
-//partea de interfata cu utilizatorul pt a adauga o camera
+UI::UI()
+{
+
+}
+
+UI::UI(const Service& serv)
+{
+	this->serv = serv;
+}
+
+UI::~UI()
+{
+}
+
+//adaugarea unei camere
 void UI::addElem(Service& serv)
 {
 	int id = 0;
@@ -10,15 +24,8 @@ void UI::addElem(Service& serv)
 	char* nr=new char[10];
 	bool eliberata=true;
 	int k = 0;
-	while (k == 0)
-	{
-		cout << "Introduceti id-ul camerei: ";
-		cin >> id;
-		if (valid.id_unic(id) == true)
-			k = 1;
-		else
-			cout << "Id-ul trebuie sa fie unic! " << endl;
-	}
+	cout << "Introduceti id-ul camerei: ";
+	cin >> id;
 	cout << "Introduceti numarul camerei: ";
 	cin >> nr;
 	cout << "Introduceti tipul camerei: ";
@@ -80,22 +87,7 @@ void UI::afisare_elib(Service& serv) {
 
 //afiseaza procentajul fiecarui tip de camera
 void UI::afisare_procentaj(Service& serv) {
-	int v[3];
-	serv.procentaj(repo, v);
-	for (int i = 0; i < 3; i++)
-	{
-		int nr = 0;
-		int ultim = 0;
-		ultim = v[i] % 10;
-		nr = v[i] / 10;
-		if (ultim == 1)
-			cout << "Simpla: " << nr << "%;" << endl;
-		if (ultim == 2)
-			cout << "Dubla: " << nr << "%;" << endl;
-		if (ultim == 3)
-			cout << "Vip: " << nr << "%;" << endl;
-	}
-	cout << endl;
+	serv.procentaj_tipuri();
 }
 
 
@@ -160,4 +152,51 @@ void UI::incarcaElemente(Service& serv)
 	serv.adauga(e5);
 	RezervareCamera e6 = RezervareCamera(6, "A9", "vip", false);
 	serv.adauga(e6);
+	RezervareCamera e7 = RezervareCamera(7, "Z9", "deluxe", true);
+	serv.adauga(e7);
+}
+
+void UI::run_ui(Service& serv) {
+	serv.clearFromFile();
+	serv.loadFromFile();
+	//serv.clearFromFile();
+	//incarcaElemente(serv);
+	bool stop = false;
+	int option = 0;
+	afisare_meniu();
+	while (stop == false) {
+		option = get_input();
+		if (option == 1) {									//adaugarea unei camere
+			addElem(serv);
+			afisare(serv);
+			afisare_meniu();
+			continue;
+		}
+		if (option == 2) {									//stergerea unei camere
+			deleteElem(serv);
+			afisare(serv);
+			afisare_meniu();
+			continue;
+		}
+		if (option == 3) {									//actualizarea unei camere
+			updateElem(serv);
+			afisare(serv);
+			afisare_meniu();
+			continue;
+		}
+		if (option == 4) {
+			afisare_procentaj(serv);						//afisarea procentajului tipurilor de camera
+			afisare_meniu();
+			continue;
+		}
+		if (option == 10) {
+			afisare(serv);									//afisarea tuturor camerelor
+			afisare_meniu();
+			continue;
+		}
+		if (option == 11) {
+			stop = true;									//oprirea programului
+			serv.clearFromFile();
+		}
+	}
 }

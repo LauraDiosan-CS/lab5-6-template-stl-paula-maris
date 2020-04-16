@@ -23,7 +23,10 @@ public:
 	void setEliberata(bool eliberata);
 	bool getEliberata();
 	bool operator==(const RezervareCamera&);
-	friend ostream& operator<<(ostream& os, const RezervareCamera& s);
+	//RezervareCamera& operator=(const RezervareCamera& p);
+	//bool operator==(const RezervareCamera& p);
+	friend ostream& operator<<(ostream& os, const RezervareCamera& p);
+	friend istream& operator>>(istream& is, RezervareCamera& p); 
 	void afisare();
 	~RezervareCamera();
 };

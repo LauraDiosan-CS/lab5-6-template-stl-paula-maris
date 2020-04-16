@@ -21,9 +21,6 @@
     <ClCompile Include="Entitate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RepoFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,21 +30,12 @@
     <ClCompile Include="UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ReposFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Validator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entitate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RepoTemplate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RepoFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Test.h">
@@ -59,10 +47,7 @@
     <ClInclude Include="UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ReposFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Validator.h">
+    <ClInclude Include="RepoFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

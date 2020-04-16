@@ -7,10 +7,11 @@ using namespace std;
 
 template <class T> class RepoTemplate
 {
-private:
+protected:
 	vector<T> elem;
 public:
 	RepoTemplate<T>() {}
+	RepoTemplate(const char* fileName);
 	void deleteElem(const T&);
 	void addElem(const T&);
 	T findElemFromId(int id);
@@ -18,6 +19,13 @@ public:
 	int getSize();
 	void updateElem(const T& s, const T& nou);
 	vector<T> getAll();
+	T getElement(int poz)  
+	{
+		return this->elem[poz];
+	}
+	void clear() {   
+		this->elem.clear();
+	}
 	~RepoTemplate();
 };
 
@@ -83,7 +91,7 @@ T RepoTemplate<T>::findElemFromId(int id)
 }
 
 //Actualizarea unei camere
-//in: vechi,nou: 2 obiecte de tip T
+//in: vechi, nou: 2 obiecte de tip T
 //out: repo-ul cu elementul actualizat
 template<class T>
 void RepoTemplate<T>::updateElem(const T& vechi, const T& nou)
@@ -103,5 +111,3 @@ vector<T> RepoTemplate<T>::getAll()
 //destructorul
 template <class T> RepoTemplate<T>::~RepoTemplate() {
 }
-
-
